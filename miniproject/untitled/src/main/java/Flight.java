@@ -22,6 +22,10 @@ public class Flight {
         this.passengers = new ArrayList<>();
     }
 
+    public Flight(){
+        this.passengers = new ArrayList<>();
+    }
+
     public static FlightsEnum valueOf(String next) {
         switch (next) {
             case "KBL":
@@ -107,7 +111,7 @@ public class Flight {
              return    this.getFlightIDTag().getFlightIDCode() +
                         this.getUniqueFlightNumber() + ", " +
                         this.getFlightDestination() + ", " +
-                        this.getFlightDuration() + " H" + ", " + "£" +
+                        this.getFlightDuration() + " H" + ", " + "$" +
                         this.getFlightPrice();
 
     }

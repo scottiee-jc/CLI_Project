@@ -11,3 +11,22 @@ public class FlightDataBase {
         put(4, new Flight(2762, "New York", 12,  415, FlightsEnum.NEW_YORK));
     }};
 }
+
+
+// code for if we wanted to check the no. length value is correct for passport and passenger numbers
+//
+// public boolean check(String input){
+//    int numDigits = 0;
+//    int numLetters = 0;
+//    for(int i=0; i<input.length();i++){
+//        if(Character.isLetter(input.charAt(i))) numLetters++;
+//        if(Character.isDigit(input.charAt(i))) numDigits++;
+//    }
+//    return (numDigits >= 5) && (numLetters >= 5);
+//}
+
+
+// then get the input again and assign it to a message
+// while(!check(message)){
+// e.g. String input =
+// }

@@ -6,8 +6,8 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Hello, welcome to flight booker!");
-        System.out.println("Please press 1 to continue");
-        int number = scanner.nextInt();
+        System.out.println("Please press enter to continue");
+        scanner.nextLine();
 
         int menuSelection = 0;
 
@@ -18,23 +18,23 @@ public class Main {
 
             switch (menuSelection) {
                 case 1 -> {
-                    System.out.println("You have selected option 1, add a new flight:");
+                    System.out.println("You have selected option 1. Add a new flight:");
                     addNewFlight(scanner);
                 }
                 case 2 -> {
-                    System.out.println("You have selected option 2, list all flights:");
+                    System.out.println("You have selected option 2. List of all flights:");
                     listAllFlights(scanner);
                 }
                 case 3 -> {
-                    System.out.println("You have selected option 3, add a new passenger:");
+                    System.out.println("You have selected option 3. Add a new passenger:");
                     addNewPassenger(scanner);
                 }
                 case 4 -> {
-                    System.out.println("You have selected option 4, book a flight:");
+                    System.out.println("You have selected option 4. Book a flight:");
                     bookPassenger(scanner);
                 }
                 case 5 -> {
-                    System.out.println("You have selected option 5, cancel a flight:");
+                    System.out.println("You have selected option 5. Cancel a flight:");
                     cancelFlight(scanner);
                 }
                 case 6 -> {
@@ -71,9 +71,10 @@ public class Main {
         inputFlightNumber = scanner.nextInt();
 
         System.out.println("Input flight destination: \n");
+        scanner.nextLine();
         String inputFlightDestination = scanner.nextLine();
 
-        System.out.println("Input flight duration: \n");
+        System.out.println("Input flight duration (hours): \n");
         int inputFlightDuration;
         while(!scanner.hasNextInt()) {
             String input = scanner.next();
@@ -82,7 +83,7 @@ public class Main {
         }
         inputFlightDuration = scanner.nextInt();
 
-        System.out.println("Input flight price: \n");
+        System.out.println("Input flight price ($): \n");
         int inputFlightPrice;
         while(!scanner.hasNextInt()) {
             String input = scanner.next();
@@ -91,7 +92,7 @@ public class Main {
         }
         inputFlightPrice = scanner.nextInt();
 
-        System.out.println("Please enter a flight ID tag: \n");
+        System.out.println("Please enter a flight ID tag (3 letter airport code): \n");
         FlightsEnum inputFlightIDTag = Flight.valueOf(scanner.next());
 
         FlightDataBase.flights.put(++FlightDataBase.counter, new Flight(inputFlightNumber, inputFlightDestination,inputFlightDuration, inputFlightPrice, inputFlightIDTag));
@@ -100,7 +101,9 @@ public class Main {
     }
 
     private static void listAllFlights(Scanner scanner){
-        System.out.println(FlightDataBase.flights.values().toString());
+        for(Flight flight: FlightDataBase.flights.values()){
+            System.out.println(flight.toString());
+        }
     }
 
     private static void addNewPassenger(Scanner scanner){
@@ -108,7 +111,7 @@ public class Main {
         scanner.nextLine();
         String inputPassengerName = scanner.nextLine();
         System.out.println("Input phone number: \n");
-        scanner.nextLine();
+        //scanner.nextLine();
         String inputPhoneNumber = scanner.nextLine();
         System.out.println("Input passport number: \n");
         int inputPassportNumber;
@@ -119,7 +122,7 @@ public class Main {
         }
         inputPassportNumber = scanner.nextInt();
         PassengerDataBase.passengers.put(++PassengerDataBase.counter, new Passenger(inputPassengerName, inputPhoneNumber, inputPassportNumber));
-
+        System.out.println("Passenger has been added to the system");
     }
 
     private static void bookPassenger(Scanner scanner){
@@ -132,26 +135,27 @@ public class Main {
             System.out.println("Please enter a valid passport number or exit and 'Add a new passenger'");
         }
         inputPassportNumber = scanner.nextInt();
-        Passenger passengerToBook = null;
+        Passenger passengerToBook = new Passenger();
         for(Passenger passenger : PassengerDataBase.passengers.values()) {
             if(passenger.getPassportNumber() == inputPassportNumber) {
                 passenger = passengerToBook;
             }
         }
         System.out.println("Here is a list of available flights:");
-        System.out.println(FlightDataBase.flights.values().toString());
+        for(Flight flight: FlightDataBase.flights.values()){
+            System.out.println(flight.toString());
+        }
 
-        System.out.println("Input the number of the flight to book onto:");
+        System.out.println("=========================");
+        System.out.println("Input the 4 digit number of the flight you want to book: (Eg ABD1234 -> 1234)");
         int inputFlightNumber = scanner.nextInt();
-        Flight flightToBook = null;
+        Flight flightToBook = new Flight();
         for(Flight flight : FlightDataBase.flights.values()) {
             if(flight.getUniqueFlightNumber() == inputFlightNumber){
                 flight = flightToBook;
             }
         }
         flightToBook.addPassengerToFlight(passengerToBook);
-
-        displaymenu();
     }
 
     private static void cancelFlight(Scanner scanner) {
