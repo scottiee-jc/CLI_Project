@@ -4,8 +4,7 @@ public enum FlightsEnum {
     SYDNEY("SYD"),
     AMSTERDAM("AMS"),
     PORTO("OPO"),
-    NEW_YORK("EWR"),
-    UNKNOWN("UKN");
+    NEW_YORK("EWR");
 
     // KABUL (KBL), KBL1524; DURATION 17H, PRICE £634,
     // SYDNEY (SYD), SYD5743; DURATION 26H, PRICE £829

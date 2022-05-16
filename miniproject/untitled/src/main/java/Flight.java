@@ -98,12 +98,12 @@ public class Flight {
 
     public void addPassengerToFlight(Passenger passenger){
         this.passengers.add(passenger);
-        System.out.println(passenger.getName() + " has been successfully booked onto flight " + this.getFlightIDTag().getFlightIDCode());
+        System.out.println(passenger.getName() + " has been successfully booked onto flight " + this.getFlightIDTag().getFlightIDCode() + this.getUniqueFlightNumber());
     }
 
     public void cancelFlightForPassenger(Passenger passenger){
         this.passengers.remove(passenger);
-        System.out.println(passenger.getName() + " has been successfully removed from flight " + this.getFlightIDTag().getFlightIDCode());
+        System.out.println(passenger.getName() + " has been successfully removed from flight " + this.getFlightIDTag().getFlightIDCode() + this.getUniqueFlightNumber());
     }
 
     @Override

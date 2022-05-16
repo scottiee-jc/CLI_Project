@@ -43,7 +43,38 @@ public class Main {
             }
         } while (menuSelection != 6);
 
+    }
 
+    // private static void cancelFlight(Scanner scanner) {}
+
+    private static void bookPassenger(Scanner scanner) {
+        System.out.println("Input Passport Number: ");
+        scanner.nextLine();
+        int inputPassportNumber;
+        while(!scanner.hasNextInt()){
+            String input = scanner.next();
+            System.out.printf("\"%s\" is not a valid passport number\n", input);
+            System.out.println("Please enter a valid passport number or exit and 'Add a new passenger'");
+        }
+        inputPassportNumber = scanner.nextInt();
+
+        Object[] passengerList = PassengerDataBase.passengers.values().stream()
+                .filter(passenger -> passenger.getPassportNumber() == inputPassportNumber).toArray();
+        Passenger passengerToBook = (Passenger) passengerList[0];
+
+        System.out.println("Here is a list of available flights:");
+        for(Flight flight: FlightDataBase.flights.values()){
+            System.out.println(flight.toString());
+        }
+
+        System.out.println("=========================");
+        System.out.println("Input the 4 digit number of the flight you want to book: (Eg ABD1234 -> 1234)");
+        int inputFlightNumber = scanner.nextInt();
+        Object[] flightList = FlightDataBase.flights.values().stream()
+                .filter(flight -> flight.getUniqueFlightNumber() == inputFlightNumber).toArray();
+        Flight flightToBook = (Flight) flightList[0];
+
+        flightToBook.addPassengerToFlight(passengerToBook);
     }
 
     private static void displaymenu() {
@@ -59,11 +90,10 @@ public class Main {
     }
 
 
-
-    private static void addNewFlight(Scanner scanner){
-        System.out.println("Input flight number: \n");
+    private static void addNewFlight(Scanner scanner) {
+        System.out.println("Input 4 digit flight number: \n");
         int inputFlightNumber;
-        while(!scanner.hasNextInt()) {
+        while (!scanner.hasNextInt()) {
             String input = scanner.next();
             System.out.printf("\"%s\" is not a valid flight number\n", input);
             System.out.println("Please enter a valid flight number: ");
@@ -76,7 +106,7 @@ public class Main {
 
         System.out.println("Input flight duration (hours): \n");
         int inputFlightDuration;
-        while(!scanner.hasNextInt()) {
+        while (!scanner.hasNextInt()) {
             String input = scanner.next();
             System.out.printf("\"%s\" is not a valid duration\n", input);
             System.out.println("Please enter a valid duration: ");
@@ -85,7 +115,7 @@ public class Main {
 
         System.out.println("Input flight price ($): \n");
         int inputFlightPrice;
-        while(!scanner.hasNextInt()) {
+        while (!scanner.hasNextInt()) {
             String input = scanner.next();
             System.out.printf("\"%s\" is not a price\n", input);
             System.out.println("Please enter a valid price: ");
@@ -95,98 +125,79 @@ public class Main {
         System.out.println("Please enter a flight ID tag (3 letter airport code): \n");
         FlightsEnum inputFlightIDTag = Flight.valueOf(scanner.next());
 
-        FlightDataBase.flights.put(++FlightDataBase.counter, new Flight(inputFlightNumber, inputFlightDestination,inputFlightDuration, inputFlightPrice, inputFlightIDTag));
+        FlightDataBase.flights.put(++FlightDataBase.counter, new Flight(inputFlightNumber, inputFlightDestination, inputFlightDuration, inputFlightPrice, inputFlightIDTag));
         System.out.println("Flight successfully added to database");
 
     }
 
-    private static void listAllFlights(Scanner scanner){
-        for(Flight flight: FlightDataBase.flights.values()){
+    private static void listAllFlights(Scanner scanner) {
+        for (Flight flight : FlightDataBase.flights.values()) {
             System.out.println(flight.toString());
         }
     }
 
-    private static void addNewPassenger(Scanner scanner){
+    public static boolean check(String inputPhoneNo){
+        int numDigits = 0;
+        for (int i = 0; i < inputPhoneNo.length(); i++) {
+            if (Character.isDigit(inputPhoneNo.charAt(i))) numDigits++;
+        }
+        return (numDigits < 11 || numDigits > 11);
+    }
+
+    private static void addNewPassenger(Scanner scanner) {
         System.out.println("Input name: \n");
         scanner.nextLine();
         String inputPassengerName = scanner.nextLine();
         System.out.println("Input phone number: \n");
-        //scanner.nextLine();
-        String inputPhoneNumber = scanner.nextLine();
-        System.out.println("Input passport number: \n");
-        int inputPassportNumber;
-        while(!scanner.hasNextInt()){
-            String input = scanner.next();
-            System.out.printf("\"%s\" is not a valid passport number\n", input);
-            System.out.println("Please enter a valid passport number: ");
+        String inputPhoneNo = scanner.nextLine();
+        while(check(inputPhoneNo)) {
+            System.out.printf("\"%s\" is not a valid phone number\n", inputPhoneNo);
+            System.out.println("Please enter valid phone number (11 digits pls!)");
+            scanner.next();
         }
-        inputPassportNumber = scanner.nextInt();
-        PassengerDataBase.passengers.put(++PassengerDataBase.counter, new Passenger(inputPassengerName, inputPhoneNumber, inputPassportNumber));
-        System.out.println("Passenger has been added to the system");
+            System.out.println("Input passport number: \n");
+            int inputPassportNumber;
+            while (!scanner.hasNextInt()) {
+                String input = scanner.next();
+                System.out.printf("\"%s\" is not a valid passport number\n", input);
+                System.out.println("Please enter a valid passport number: ");
+            }
+            inputPassportNumber = scanner.nextInt();
+            PassengerDataBase.passengers.put(++PassengerDataBase.counter, new Passenger(inputPassengerName, inputPhoneNo, inputPassportNumber));
+            System.out.println("Passenger has been added to the system");
+        }
+
+        private static void cancelFlight(Scanner scanner){
+
+            while (!scanner.hasNextInt() || !scanner.hasNextLine()) { // issue is the string
+                String input = scanner.next();
+                System.out.printf("\"%s\" is not a valid passport number\n", input);
+                System.out.println("Please enter a valid passport number...");
+                String input2 = scanner.next();
+                System.out.printf("\"%s\" is not a valid flight number\n", input2);
+                System.out.println("Please enter a valid flight number...");
+            }
+            System.out.println("Input Passport Number: ");
+            int inputPassportNumber = scanner.nextInt();
+            System.out.println("Input Flight Number you were booked on: ");
+            int flightNumber = scanner.nextInt();
+            //Flight number list
+            if (FlightDataBase.flights.containsKey(flightNumber)) {
+                FlightDataBase.flights.remove(flightNumber);
+                System.out.println("Are you sure you want to be removed from this flight? (y/n): ");
+                String yn = scanner.nextLine();
+                if (yn.equals("y") || yn.equals("Y")) {
+                    scanner.nextLine();
+                } else if (yn.equals("n") || yn.equals("N")) {
+                    displaymenu();
+                }
+                System.out.println("You have been successfully removed from flight " + flightNumber);
+            } else {
+                System.out.println("Could not find flight number " + flightNumber + " with passport number " + inputPassportNumber);
+            }
+        }
+
     }
-
-    private static void bookPassenger(Scanner scanner){
-        System.out.println("Input Passport Number: ");
-        scanner.nextLine();
-        int inputPassportNumber;
-        while(!scanner.hasNextInt()){
-            String input = scanner.next();
-            System.out.printf("\"%s\" is not a valid passport number\n", input);
-            System.out.println("Please enter a valid passport number or exit and 'Add a new passenger'");
-        }
-        inputPassportNumber = scanner.nextInt();
-        Passenger passengerToBook = new Passenger();
-        for(Passenger passenger : PassengerDataBase.passengers.values()) {
-            if(passenger.getPassportNumber() == inputPassportNumber) {
-                passenger = passengerToBook;
-            }
-        }
-        System.out.println("Here is a list of available flights:");
-        for(Flight flight: FlightDataBase.flights.values()){
-            System.out.println(flight.toString());
-        }
-
-        System.out.println("=========================");
-        System.out.println("Input the 4 digit number of the flight you want to book: (Eg ABD1234 -> 1234)");
-        int inputFlightNumber = scanner.nextInt();
-        Flight flightToBook = new Flight();
-        for(Flight flight : FlightDataBase.flights.values()) {
-            if(flight.getUniqueFlightNumber() == inputFlightNumber){
-                flight = flightToBook;
-            }
-        }
-        flightToBook.addPassengerToFlight(passengerToBook);
-    }
-
-    private static void cancelFlight(Scanner scanner) {
-
-        while (!scanner.hasNextInt() || !scanner.hasNextLine()) { // issue is the string
-            String input = scanner.next();
-            System.out.printf("\"%s\" is not a valid passport number\n", input);
-            System.out.println("Please enter a valid passport number...");
-            String input2 = scanner.next();
-            System.out.printf("\"%s\" is not a valid flight number\n", input2);
-            System.out.println("Please enter a valid flight number...");
-        }
-        System.out.println("Input Passport Number: ");
-        int inputPassportNumber = scanner.nextInt();
-        System.out.println("Input Flight Number you were booked on: ");
-        int flightNumber = scanner.nextInt();
-        //Flight number list
-        if (FlightDataBase.flights.containsKey(flightNumber)) {
-            FlightDataBase.flights.remove(flightNumber);
-            System.out.println("Are you sure you want to be removed from this flight? (y/n): ");
-            String yn = scanner.nextLine();
-            if (yn.equals("y") || yn.equals("Y")){
-                scanner.nextLine();
-            } else if (yn.equals("n")||yn.equals("N")) {
-                displaymenu();
-            }
-        System.out.println("You have been successfully removed from flight " + flightNumber);
-        } else {
-            System.out.println("Could not find flight number " + flightNumber + " with passport number " + inputPassportNumber);
-        }
-  }}
 
 
 
